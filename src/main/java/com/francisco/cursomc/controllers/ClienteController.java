@@ -16,12 +16,17 @@ public class ClienteController {
     ClienteService clienteService;
 
     @GetMapping
-    public Cliente testaApi(){
-        return clienteService.retornaCliente();
+    public Cliente testaApi(@RequestParam Integer i){
+        return clienteService.retornaCliente(i);
     }
 
     @PostMapping
     public Map<Integer, Cliente> salvaCliente(@RequestBody Cliente cliente){
         return clienteService.salvaCliente(cliente);
+    }
+
+    @PutMapping
+    public void atualizaCliente(@RequestBody Cliente cliente, @RequestParam Integer integer){
+        clienteService.atualizaCliente(integer, cliente);
     }
 }

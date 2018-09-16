@@ -1,26 +1,25 @@
 package com.francisco.cursomc.controllers;
 
 import com.francisco.cursomc.model.Categoria;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.francisco.cursomc.service.CategoriaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController(value = "/categorias")
+@RestController
+@RequestMapping(value = "/categorias")
 public class CategoriaController {
 
-    @GetMapping
-    public List<Categoria> listar(){
+    @Autowired
+    private CategoriaService categoriaService;
 
-        Categoria cat1 = new Categoria(1, "Informática");
-        Categoria cat2 = new Categoria(2, "Escritório");
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> find(@PathVariable Integer id){
+        Categoria obj = categoriaService.buscar(id);
 
-        List<Categoria> lista = new ArrayList<>();
-
-        lista.add(cat1);
-        lista.add(cat2);
-
-        return lista;
+        return ResponseEntity.ok().body(obj);
     }
 }

@@ -2,6 +2,9 @@ package com.francisco.cursomc.model;
 
 import com.francisco.cursomc.model.enums.EstadoPagamento;
 
+import javax.persistence.Entity;
+
+@Entity
 public class PagamentoComCartao extends Pagamento{
 
     private Integer numeroDeParcelas;

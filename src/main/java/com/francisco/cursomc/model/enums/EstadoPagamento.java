@@ -1,5 +1,7 @@
 package com.francisco.cursomc.model.enums;
 
+import com.francisco.cursomc.model.Estado;
+
 public enum EstadoPagamento {
 
     PENDENTE(1, "Pendente"),
@@ -20,5 +22,19 @@ public enum EstadoPagamento {
 
     public String getDescricao() {
         return descricao;
+    }
+
+    public static EstadoPagamento toEnum(Integer cod){
+        if(cod == null){
+            return null;
+        }
+
+        for(EstadoPagamento x : EstadoPagamento.values()){
+            if(cod.equals(x.getCod())){
+                return x;
+            }
+        }
+
+        throw new IllegalArgumentException("Id Inválido? " + cod);
     }
 }

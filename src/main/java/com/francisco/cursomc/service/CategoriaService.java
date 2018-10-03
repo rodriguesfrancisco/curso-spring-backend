@@ -1,5 +1,6 @@
 package com.francisco.cursomc.service;
 
+import com.francisco.cursomc.dto.CategoriaDTO;
 import com.francisco.cursomc.model.Categoria;
 import com.francisco.cursomc.repositories.CategoriaRepository;
 import com.francisco.cursomc.service.exceptions.DataIntegrityException;
@@ -53,5 +54,9 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return categoriaRepository.findAll(pageRequest);
+    }
+
+    public Categoria fromDTO(CategoriaDTO objDto){
+        return new Categoria(objDto.getId(), objDto.getNome());
     }
 }

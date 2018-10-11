@@ -6,9 +6,12 @@ import com.francisco.cursomc.model.Cidade;
 import com.francisco.cursomc.model.Cliente;
 import com.francisco.cursomc.model.Cliente;
 import com.francisco.cursomc.model.Endereco;
+import com.francisco.cursomc.model.enums.Perfil;
 import com.francisco.cursomc.model.enums.TipoCliente;
 import com.francisco.cursomc.repositories.ClienteRepository;
 import com.francisco.cursomc.repositories.EnderecoRepository;
+import com.francisco.cursomc.security.UserSS;
+import com.francisco.cursomc.service.exceptions.AuthorizationException;
 import com.francisco.cursomc.service.exceptions.DataIntegrityException;
 import com.francisco.cursomc.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,11 @@ public class ClienteService {
 
 
     public Cliente find(Integer id){
+        UserSS user = UserService.authenticated();
+        if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())){
+            throw new AuthorizationException("Perfil não autorizado!");
+        }
+
         Optional<Cliente> obj = clienteRepository.findById(id);
 
         return obj.orElseThrow(() -> new ObjectNotFoundException(

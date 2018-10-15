@@ -1,13 +1,15 @@
 package com.francisco.cursomc.service;
 
-import com.francisco.cursomc.model.Categoria;
-import com.francisco.cursomc.model.ItemPedido;
-import com.francisco.cursomc.model.PagamentoComBoleto;
-import com.francisco.cursomc.model.Pedido;
+import com.francisco.cursomc.model.*;
 import com.francisco.cursomc.model.enums.EstadoPagamento;
 import com.francisco.cursomc.repositories.*;
+import com.francisco.cursomc.security.UserSS;
+import com.francisco.cursomc.service.exceptions.AuthorizationException;
 import com.francisco.cursomc.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,5 +69,16 @@ public class PedidoService {
         itemPedidoRepository.saveAll(obj.getItens());
         emailService.sendOrderConfirmationEmail(obj);
         return obj;
+    }
+
+    public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+        UserSS user = UserService.authenticated();
+        if(user == null){
+            throw new AuthorizationException("Acesso Negado");
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        Cliente cliente = clienteService.find(user.getId());
+        return pedidoRepository.findByCliente(cliente, pageRequest);
     }
 }

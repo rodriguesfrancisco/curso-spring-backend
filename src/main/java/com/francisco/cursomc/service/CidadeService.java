@@ -14,11 +14,6 @@ public class CidadeService {
     private CidadeRepository cidadeRepository;
 
     public List<Cidade> findByEstado(Integer estadoId){
-        List<Cidade> list = cidadeRepository.findCidades(estadoId);
-        for(Cidade x : list){
-            System.out.println(x.getId());
-            System.out.println(x.getNome());
-        }
-        return list;
+        return cidadeRepository.findCidades(estadoId);
     }
 }
